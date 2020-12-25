@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoDulce!</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" href="../../app.css">
+
+    <link rel="stylesheet" type="text/css" href="/bootstrap-4.3.1-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+</head>
+
+<body>
+
+    {{> navigation}}
+
+
+    <div class="container p-4">
+
+        {{{body}}}
+    </div>
+    <script>
+        var mySwiper = new Swiper('.swiper-container', {
+            // Optional parameters
+            direction: 'horizontal',
+            loop: true,
+
+            // If we need pagination
+            pagination: {
+                el: '.swiper-pagination',
+            },
+
+            // Navigation arrows
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+
+            // And if we need scrollbar
+            scrollbar: {
+                el: '.swiper-scrollbar',
+            },
+        })
+    </script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.js"></script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script type="text/javascript" src="/popper.js/dist/umd/popper.js"></script>
+    <script type="text/javascript" src="/jquery.min.js"></script>
+</body>
+
+</html>
