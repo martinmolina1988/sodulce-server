@@ -75,7 +75,7 @@ router.post("/editimage", async (req, res) => {
 router.post("/insertoProducto", async (req, res, next) => {
     const { description, producto, precio } = req.body;
     console.log(description, producto, precio)
-    // const result = await cloudinary.uploader.upload(req.file.path);
+    const result = await cloudinary.uploader.upload(req.file.path);
     const nuevoProducto = new Productos({
         producto,
         precio,
