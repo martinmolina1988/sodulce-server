@@ -73,31 +73,32 @@ router.post("/editimage", async (req, res) => {
 })
 
 router.post("/insertoProducto", async (req, res, next) => {
-    const result = await cloudinary.uploader.upload(req.file.path);
     const { description, producto, precio } = req.body;
-    const nuevoProducto = new Productos({
-        producto,
-        precio,
-        description,
-        principal: result.url,
-        imageURL: result.url,
-        public_id: result.public_id
-
-    })
-
-    const newPhoto = new Photo({
-        producto,
-        imageURL: result.url,
-        public_id: result.public_id
-
-    })
-    try {
-        await nuevoProducto.save();
-        await newPhoto.save();
-        await fs.unlink(req.file.path);
-    } catch (err) {
-        next(err);
-    }
+    console.log(description, producto, precio)
+    /* const result = await cloudinary.uploader.upload(req.file.path);
+     const nuevoProducto = new Productos({
+         producto,
+         precio,
+         description,
+         principal: result.url,
+         imageURL: result.url,
+         public_id: result.public_id
+ 
+     })
+ 
+     const newPhoto = new Photo({
+         producto,
+         imageURL: result.url,
+         public_id: result.public_id
+ 
+     })
+     try {
+         await nuevoProducto.save();
+         await newPhoto.save();
+         await fs.unlink(req.file.path);
+     } catch (err) {
+         next(err);
+     }*/
 
 })
 
