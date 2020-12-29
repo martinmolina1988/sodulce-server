@@ -95,7 +95,7 @@ router.post("/insertoProducto", async (req, res, next) => {
     try {
         await nuevoProducto.save();
         await newPhoto.save();
-        await fs.unlink(req.file.path);
+        //await fs.unlink(req.file.path);
     } catch (err) {
         next(err);
     }
