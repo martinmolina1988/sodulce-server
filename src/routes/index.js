@@ -75,8 +75,8 @@ router.post("/editimage", async (req, res) => {
 router.post("/insertoProducto", async (req, res, next) => {
     try {
         const { description, producto, precio } = req.body;
-        console.log(description, producto, precio)
-        const result = await cloudinary.uploader.upload(req.file.path);
+        console.log(req.body)
+        //const result = await cloudinary.uploader.upload(req.file.path);
         const nuevoProducto = new Productos({
             producto,
             precio,
@@ -96,7 +96,7 @@ router.post("/insertoProducto", async (req, res, next) => {
 
         await nuevoProducto.save();
         await newPhoto.save();
-        await fs.unlink(req.file.path);
+        // await fs.unlink(req.file.path);
         res.send("OK");
     } catch (err) {
         next(err);
