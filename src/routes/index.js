@@ -3,7 +3,7 @@ const router = Router();
 
 var cors = require('cors')
 var corsOptions = {
-    origin: 'https://martinmolina1988.github.io/sodulce',
+    origin: 'https://martinmolina1988.github.io/sodulce/',
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 const Photo = require("../models/Photo");
@@ -238,7 +238,7 @@ router.get('/me', verifyToken, async (req, res) => {
 
 
 router.post('/signin', async (req, res) => {
-
+    console.log(req.body)
     const user = await User.findOne({ email: req.body.email })
     if (!user) {
         return res.status(404).send("The email doesn't exists")
