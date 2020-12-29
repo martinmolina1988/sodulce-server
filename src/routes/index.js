@@ -81,16 +81,16 @@ router.post("/insertoProducto", async (req, res, next) => {
             producto,
             precio,
             description,
-            //   principal: result.url,
-            // imageURL: result.url,
-            // public_id: result.public_id
+            principal: result.url,
+            imageURL: result.url,
+            public_id: result.public_id
 
         })
 
         const newPhoto = new Photo({
             producto,
-            //   imageURL: result.url,
-            // public_id: result.public_id
+            imageURL: result.url,
+            public_id: result.public_id
 
         })
 
