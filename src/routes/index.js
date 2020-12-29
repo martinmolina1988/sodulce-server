@@ -72,14 +72,14 @@ router.post("/editimage", async (req, res) => {
     await fs.unlink(req.file.path);
 })
 
-router.post("/insertoProducto", async (req, res) => {
+router.post("/insertoProducto", async (req, res, next) => {
     const result = await cloudinary.uploader.upload(req.file.path);
     const { description, producto, precio } = req.body;
     const nuevoProducto = new Productos({
         producto,
         precio,
-        principal: result.url,
         description,
+        principal: result.url,
         imageURL: result.url,
         public_id: result.public_id
 
@@ -91,10 +91,14 @@ router.post("/insertoProducto", async (req, res) => {
         public_id: result.public_id
 
     })
+    try {
+        await nuevoProducto.save();
+        await newPhoto.save();
+        await fs.unlink(req.file.path);
+    } catch (err) {
+        next(err);
+    }
 
-    await nuevoProducto.save();
-    await newPhoto.save();
-    await fs.unlink(req.file.path);
 })
 
 router.post("/agregoProducto", cors(corsOptions), async (req, res) => {
