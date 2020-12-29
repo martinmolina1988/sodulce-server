@@ -3,7 +3,7 @@ const router = Router();
 
 var cors = require('cors')
 var corsOptions = {
-    origin: 'https://martinmolina1988.github.io/sodulce/',
+    origin: 'https://martinmolina1988.github.io',
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 const Photo = require("../models/Photo");
