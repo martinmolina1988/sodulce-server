@@ -26,29 +26,10 @@ const jwt = require('jsonwebtoken');
 
 router.get('/', async (req, res) => {
     const photos = await Photo.find().lean();
-    res.render('images', {
-        photos,
-        helpers: {
-            imageURL: function () {
-                console.log(photos)
-                return this.imageURL;
-            }
-        }
-    });
+    res.send("Hello")
 });
 
-router.get('/images/add', async (req, res) => {
-    const photos = await Photo.find().lean();
-    res.render('image_form', {
-        photos,
-        helpers: {
-            imageURL: function () {
-                console.log(photos)
-                return this.imageURL;
-            }
-        }
-    });
-});
+
 
 
 router.post("/uploadimage", async (req, res) => {
