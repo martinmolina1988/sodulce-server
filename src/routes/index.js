@@ -34,32 +34,29 @@ router.get('/', async (req, res) => {
 
 router.post("/uploadimage", async (req, res) => {
     console.log(req.body.producto);
-    const result = await cloudinary.uploader.upload(req.file.path);
-    const { producto, principal } = req.body;
+    const { producto, principal, secure_url, public_id } = req.body;
     const newPhoto = new Photo({
 
         producto,
-        imageURL: result.url,
-        public_id: result.public_id
+        imageURL: secure_url,
+        public_id: public_id
 
     })
     await newPhoto.save();
-    await fs.unlink(req.file.path);
 })
 router.post("/editimage", async (req, res) => {
-    const result = await cloudinary.uploader.upload(req.file.path);
-    const { _id, producto } = req.body;
+    const { _id, producto, secure_url, public_id } = req.body;
     console.log(req.body);
     const newPhoto = new Photo({
 
         producto,
-        imageURL: result.url,
-        public_id: result.public_id
+        imageURL: secure_url,
+        public_id: public_id
 
     })
     Productos.updateOne(
         { "_id": _id },
-        { $set: { principal: result.url } },
+        { $set: { principal: secure_url } },
         function (err, result) {
             if (err) {
                 res.send(err);
@@ -69,34 +66,31 @@ router.post("/editimage", async (req, res) => {
         }
     );
     await newPhoto.save();
-    await fs.unlink(req.file.path);
 })
 
 router.post("/insertoProducto", async (req, res, next) => {
     try {
-        const { description, producto, precio } = req.body;
+        const { description, producto, precio, secure_url, public_id } = req.body;
         console.log(req.body)
-        const result = await cloudinary.uploader.upload(req.file.path);
         const nuevoProducto = new Productos({
             producto,
             precio,
             description,
-            principal: result.url,
-            imageURL: result.url,
-            public_id: result.public_id
+            principal: secure_url,
+            imageURL: secure_url,
+            public_id: public_id
 
         })
 
         const newPhoto = new Photo({
             producto,
-            imageURL: result.url,
-            public_id: result.public_id
+            imageURL: secure_url,
+            public_id: public_id
 
         })
 
         await nuevoProducto.save();
         await newPhoto.save();
-        await fs.unlink(req.file.path);
         res.send("OK");
     } catch (err) {
         next(err);
