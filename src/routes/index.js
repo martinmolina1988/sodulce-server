@@ -6,8 +6,10 @@ var corsOptions = {
     origin: 'https://martinmolina1988.github.io',
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
+const Sobremi = require("../models/Sobremi");
 const Photo = require("../models/Photo");
 const Products = require("../models/Products");
+const Banner = require("../models/Banner");
 const cloudinary = require("cloudinary").v2;
 cloudinary.config({
     cloud_name: process.env.CLOUDINATY_CLOUD_NAME,
@@ -128,6 +130,59 @@ router.post("/editoProducto", cors(corsOptions), async (req, res) => {
         }
     );
 })
+router.post("/editoBanner", cors(corsOptions), async (req, res) => {
+    const { public_id, secure_url } = req.body;
+
+    try {
+        const result = await Banner.find({ "_id": "5fee65440ac577207cb855ca" });
+        const cloud = await cloudinary.uploader.destroy(result[0].public_id)
+
+        await Banner.update(
+            { "_id": "5fee65440ac577207cb855ca" },
+            {
+                $set: {
+                    secure_url: secure_url,
+                    public_id: public_id
+                }
+            },
+            function (err, result) {
+                if (err) {
+                    res.send(err);
+                } else {
+                    res.send(result);
+                }
+            }
+        );
+    } catch (e) {
+        console.log(e)
+        res.status(500).send('There was a problem registering your user');
+    }
+
+})
+router.post("/editoSobreMi", cors(corsOptions), async (req, res) => {
+    console.log(req.body)
+    const { sobremi } = req.body;
+
+    try {
+
+        await Sobremi.findByIdAndUpdate(
+            "5fef1151c6f99602e840665d", { "sobremi": sobremi }, { new: true, useFindAndModify: false },
+            function (err, result) {
+                if (err) {
+                    res.send(err);
+                    console.log(err)
+                } else {
+                    console.log(result)
+                    res.send(result);
+                }
+            }
+        );
+    } catch (e) {
+        console.log(e)
+        res.status(500).send('There was a problem registering your user');
+    }
+
+})
 
 
 
@@ -146,6 +201,33 @@ router.get("/buscoproducto", async (req, res) => {
         }
     );
 }),
+
+    router.get("/buscobanner", async (req, res) => {
+        const result = await Banner.find({ "nombre": "sodulce" },
+
+            function (err, result) {
+                if (err) {
+                    res.send(err);
+                } else {
+                    res.send(result);
+                }
+            }
+        );
+        console.log(result)
+    }),
+    router.get("/buscoSobremi", async (req, res) => {
+        const result = await Sobremi.find({ "nombre": "sodulce" },
+
+            function (err, result) {
+                if (err) {
+                    res.send(err);
+                } else {
+                    res.send(result);
+                }
+            }
+        );
+        console.log(result)
+    }),
 
 
     router.get("/listaproductos", async (req, res) => {
