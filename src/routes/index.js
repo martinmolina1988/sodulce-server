@@ -80,7 +80,8 @@ router.post("/insertoProducto", async (req, res, next) => {
             description,
             principal: secure_url,
             imageURL: secure_url,
-            public_id: public_id
+            public_id: public_id,
+            fecha: Date.now()
 
         })
 
@@ -160,7 +161,6 @@ router.post("/editoBanner", cors(corsOptions), async (req, res) => {
 
 })
 router.post("/editoSobreMi", cors(corsOptions), async (req, res) => {
-    console.log(req.body)
     const { sobremi } = req.body;
 
     try {
@@ -178,7 +178,6 @@ router.post("/editoSobreMi", cors(corsOptions), async (req, res) => {
             }
         );
     } catch (e) {
-        console.log(e)
         res.status(500).send('There was a problem registering your user');
     }
 
@@ -213,7 +212,6 @@ router.get("/buscoproducto", async (req, res) => {
                 }
             }
         );
-        console.log(result)
     }),
     router.get("/buscoSobremi", async (req, res) => {
         const result = await Sobremi.find({ "nombre": "sodulce" },
@@ -226,21 +224,43 @@ router.get("/buscoproducto", async (req, res) => {
                 }
             }
         );
-        console.log(result)
     }),
 
 
     router.get("/listaproductos", async (req, res) => {
-        const result = await Productos.find({},
-            function (err, result) {
-                if (err) {
-                    res.send(err);
-                } else {
-                    res.send(JSON.stringify(result, null, '\t'));
+        const { tipo, valor } = req.query;
 
+
+        if (tipo == "precio" && valor == 1) {
+            console.log("precio 1")
+            const result = await Productos.find({},
+                function (err, result) {
+                    if (err) {
+                        res.send(err);
+                    } else { res.send(JSON.stringify(result, null, '\t')); }
                 }
-            }
-        );
+            ).sort({ "precio": 1 });
+        }
+        else if (tipo == "precio" && valor == -1) {
+            console.log("precio -1")
+            const result = await Productos.find({},
+                function (err, result) {
+                    if (err) {
+                        res.send(err);
+                    } else { res.send(JSON.stringify(result, null, '\t')); }
+                }
+            ).sort({ "precio": -1 });
+        }
+        else {
+            console.log("else")
+            const result = await Productos.find({},
+                function (err, result) {
+                    if (err) {
+                        res.send(err);
+                    } else { res.send(JSON.stringify(result, null, '\t')); }
+                }
+            ).sort({ "fecha": -1 });
+        }
     }),
     router.get("/listafotos", async (req, res) => {
         const result = await Photo.find(req.query,
@@ -258,7 +278,6 @@ router.get("/buscoproducto", async (req, res) => {
 
 
     router.get("/delete", async (req, res) => {
-        console.log(req.query._id)
         const photo = await Photo.findByIdAndDelete(req.query._id);
         const result = await cloudinary.uploader.destroy(photo.public_id,
             function (err, result) {
@@ -268,7 +287,6 @@ router.get("/buscoproducto", async (req, res) => {
                     res.send(result);
                 }
             });
-        console.log(result);
     })
 router.get("/deleteall", async (req, res) => {
 
