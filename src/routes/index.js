@@ -10,6 +10,7 @@ const Sobremi = require("../models/Sobremi");
 const Photo = require("../models/Photo");
 const Products = require("../models/Products");
 const Banner = require("../models/Banner");
+const Logo = require("../models/Logo");
 const cloudinary = require("cloudinary").v2;
 cloudinary.config({
     cloud_name: process.env.CLOUDINATY_CLOUD_NAME,
@@ -160,6 +161,35 @@ router.post("/editoBanner", cors(corsOptions), async (req, res) => {
     }
 
 })
+router.post("/editoLogo", cors(corsOptions), async (req, res) => {
+    const { public_id, secure_url } = req.body;
+
+    try {
+        const result = await Logo.find({ "_id": "5ffb91dc968bc31c5cab1dd8" });
+        const cloud = await cloudinary.uploader.destroy(result[0].public_id)
+
+        await Logo.update(
+            { "_id": "5ffb91dc968bc31c5cab1dd8" },
+            {
+                $set: {
+                    secure_url: secure_url,
+                    public_id: public_id
+                }
+            },
+            function (err, result) {
+                if (err) {
+                    res.send(err);
+                } else {
+                    res.send(result);
+                }
+            }
+        );
+    } catch (e) {
+        console.log(e)
+        res.status(500).send('There was a problem registering your user');
+    }
+
+})
 router.post("/editoSobreMi", cors(corsOptions), async (req, res) => {
     const { sobremi } = req.body;
 
@@ -212,6 +242,22 @@ router.get("/buscoproducto", async (req, res) => {
                 }
             }
         );
+    }),
+
+    router.get("/buscoLogo", async (req, res) => {
+        const result = await Logo.find({ "nombre": "sodulce" },
+
+            function (err, result) {
+                if (err) {
+                    res.send(err);
+                } else {
+                    res.send(result);
+                }
+
+            }
+        );
+
+
     }),
     router.get("/buscoSobremi", async (req, res) => {
         const result = await Sobremi.find({ "nombre": "sodulce" },
